@@ -1,0 +1,99 @@
+/* Home Screen */
+.home {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* Adapted to match project theme (Orange/Beige instead of Blue) */
+  background: linear-gradient(180deg, #FDFBF7 0%, #F5E6D8 100%);
+  color: #3D2C29;
+}
+
+.home .logo {
+  font-size: 80px;
+  /* If using text logo */
+  font-family: 'Georgia', serif;
+  margin-bottom: 20px;
+}
+
+.home-logo-image {
+  width: 120px;
+  height: auto;
+  margin-bottom: 20px;
+}
+
+.home h1 {
+  font-size: 40px;
+  margin: 10px 0;
+  font-family: 'Georgia', serif;
+}
+
+.home p {
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #8C7B75;
+}
+
+.home button {
+  padding: 12px 30px;
+  font-size: 18px;
+  background: linear-gradient(90deg, #E87A3F 0%, #D65A2D 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 12px rgba(214, 90, 45, 0.2);
+}
+
+.home button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(214, 90, 45, 0.3);
+}
+
+/* Form Screen */
+.form {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: #FDFBF7;
+}
+
+.form input {
+  margin: 8px;
+  padding: 12px;
+  width: 280px;
+  border: 1px solid #DCC6B6;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.form input:focus {
+  outline: none;
+  border-color: #E87A3F;
+  box-shadow: 0 0 0 3px rgba(232, 122, 63, 0.1);
+}
+
+.form button {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #E87A3F;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  width: 280px;
+}
+
+.back {
+  background-color: transparent !important;
+  color: #8C7B75 !important;
+  border: 1px solid #DCC6B6 !important;
+  margin-top: 10px !important;
+  box-shadow: none !important;
+}
