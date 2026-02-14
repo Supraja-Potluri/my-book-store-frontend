@@ -1,0 +1,259 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500&display=swap');
+
+.landing {
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.6rem 6%;
+  position: sticky;
+  top: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  transition: box-shadow var(--transition-medium), background var(--transition-medium);
+}
+.header.scrolled { box-shadow: var(--shadow-md); background: rgba(255,255,255,0.98); }
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand img { width: 64px; height: 64px; transition: transform var(--transition-fast), filter var(--transition-fast); }
+.brand span {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+.brand:hover img { transform: scale(1.06); filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1)); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 1.1rem;
+  color: var(--color-text-light);
+}
+.nav-links span { position: relative; transition: color var(--transition-fast); }
+.nav-links span::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -6px;
+  height: 2px; width: 0;
+  background: var(--color-accent);
+  border-radius: 999px;
+  transition: width var(--transition-fast);
+}
+.nav-links span:hover { color: var(--color-text-main); }
+.nav-links span:hover::after { width: 100%; }
+
+.mobile-menu { display: none; }
+
+.register-btn {
+  background: var(--color-accent);
+  color: white;
+  padding: 14px 36px;
+  border-radius: var(--radius-sm);
+  border: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+.register-btn:hover { opacity: 0.9; }
+.register-btn:active { transform: scale(0.98); }
+.register-btn { box-shadow: 0 8px 16px rgba(232, 122, 63, 0.25); }
+
+/* HERO SECTION */
+.hero-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 3rem 8%;
+  gap: 1.5rem;
+}
+
+.hero-content h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.hero-content p {
+  font-size: 1.25rem;
+  color: var(--color-text-light);
+  max-width: 500px;
+}
+.hero-content {
+  background: var(--color-bg-soft);
+  border: 1px solid #ededf0;
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp var(--transition-medium);
+}
+
+.hero-image img {
+  width: 100%;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-medium);
+}
+.hero-image img:hover { transform: scale(1.02); }
+.hero-image { justify-self: end; max-width: 560px; }
+
+/* CAROUSEL */
+.gallery { padding: 0; }
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  padding: 0 6%;
+}
+.carousel-track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 33.3333%;
+  gap: 0;
+  scroll-snap-type: x mandatory;
+  overflow-x: auto;
+  padding-bottom: 10px;
+  padding-left: 4%;
+  padding-right: 4%;
+}
+.carousel-track::-webkit-scrollbar { height: 8px; }
+.carousel-track::-webkit-scrollbar-thumb { background: #e0e0e5; border-radius: 999px; }
+.carousel-item {
+  scroll-snap-align: start;
+}
+
+.carousel-item img {
+  width: 85%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: block;
+}
+.carousel-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #d2d2d7;
+}
+.dot.active { background: var(--color-text-main); }
+
+/* ABOUT & WHY US (Apple Minimalism) */
+.about, .why-us {
+  text-align: center;
+  padding: 3rem 8%;
+}
+
+.about h2, .why-us h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.about-text {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--color-text-light);
+  font-size: 1.2rem;
+  background: var(--color-bg-soft);
+  border: 1px solid #ededf0;
+  border-radius: var(--radius-md);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp var(--transition-medium);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.feature-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: var(--color-bg-soft);
+  padding: 2rem;
+  border-radius: var(--radius-md);
+  text-align: left;
+  border: 1px solid #f0efed;
+  box-shadow: var(--shadow-sm);
+  animation: fadeUp var(--transition-medium);
+}
+.feature-card p { font-size: 1.1rem; }
+
+.feature-card .icon { color: var(--color-accent); }
+/* Make all icons orange */
+.nav-links svg,
+.feature-card svg,
+.contact-info svg { color: var(--color-accent); }
+
+@media (max-width: 768px) {
+  .carousel-track { grid-auto-columns: 85%; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* FOOTER */
+.footer {
+  padding: 2.5rem 8%;
+  border-top: 1px solid #eee;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfbfd 100%);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contact-info h3, .footer-cta h3 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 0.6rem;
+}
+
+.contact-info p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-text-light);
+  margin-bottom: 0.3rem;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .hero-container, .features-grid, .footer-content { grid-template-columns: 1fr; display: block; }
+  .nav-links span { display: none; }
+  .mobile-menu { display: block; }
+  .carousel-item { min-width: 85%; }
+}

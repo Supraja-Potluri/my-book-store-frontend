@@ -1,110 +1,198 @@
-.splash-container {
+Container
+.landing-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
+  min-height: 100vh;
   background: linear-gradient(180deg, #FDFBF7 0%, #F5E6D8 100%);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  overflow: hidden;
+  color: #3D2C29;
+  font-family: Georgia, 'Times New Roman', serif;
 }
 
-.content-wrapper {
+/* Header */
+.landing-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 100%;
-  max-width: 400px;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.brand-name {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+.nav-links {
+  display: flex;
+  gap: 1rem;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #6c5b54;
+}
+.nav-links a {
+  cursor: default;
+}
+.menu-button {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  color: #6c5b54;
+}
+.back-button {
+  background: transparent;
+  border: 1px solid #DCC6B6;
+  border-radius: 8px;
+  padding: 0.3rem 0.6rem;
+  font-size: 1rem;
+  color: #6c5b54;
+}
+
+/* Hero */
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 2rem;
+  align-items: center;
   padding: 2rem;
-  box-sizing: border-box;
 }
-
-.logo-container {
-  margin-bottom: 2rem;
-  position: relative;
+.hero-text h1 {
+  font-size: 2.2rem;
+  margin: 0 0 1rem 0;
 }
-
-/* Creating a soft glow/circle behind the logo similar to the design */
-.logo-circle {
-  width: 120px;
-  height: 120px;
+.hero-text p {
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #8C7B75;
+  margin: 0;
+}
+.hero-art {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-art-circle {
+  width: 220px;
+  height: 220px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(246, 226, 208, 0.5) 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(246,226,208,0.6) 70%);
+  box-shadow: 0 10px 30px rgba(230, 150, 80, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 30px rgba(230, 150, 80, 0.15);
 }
-
-.logo-image {
-  width: 80px;
+.hero-art-image {
+  width: 120px;
   height: auto;
   object-fit: contain;
 }
 
-.app-title {
-  font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 2.2rem;
-  color: #3D2C29;
-  margin: 0;
-  margin-bottom: 0.5rem;
-  text-align: center;
-  font-weight: 600;
+/* Gallery */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 1rem 2rem;
 }
-
-.app-subtitle {
-  font-family: 'Helvetica Neue', 'Arial', sans-serif;
-  font-size: 1.1rem;
-  color: #8C7B75;
-  margin: 0;
-  margin-bottom: 4rem;
-  text-align: center;
-  font-weight: 400;
+.gallery-item {
+  height: 160px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #f3dfcc, #ead4c0);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
 }
-
-.action-area {
+.gallery-image {
   width: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+/* About */
+.about {
+  padding: 2rem;
+}
+.about h2 {
+  margin: 0 0 0.75rem 0;
+}
+.about p {
+  margin: 0.4rem 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #6c5b54;
+}
+
+/* Why Choose Us */
+.why {
+  padding: 2rem;
+  background: #F2E5D8;
+}
+.features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.feature-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Contact & CTA */
+.contact-cta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
   align-items: center;
 }
-
+.contact h3, .cta h3 {
+  margin: 0 0 0.75rem 0;
+}
+.contact p {
+  margin: 0;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #6c5b54;
+}
 .get-started-btn {
-  width: 100%;
-  padding: 1.2rem;
+  width: 220px;
+  padding: 1rem;
   background: linear-gradient(90deg, #E87A3F 0%, #D65A2D 100%);
   border: none;
-  border-radius: 16px;
+  border-radius: 12px;
   color: white;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 10px 20px rgba(214, 90, 45, 0.3);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-bottom: 2rem;
 }
-
 .get-started-btn:active {
   transform: scale(0.98);
   box-shadow: 0 5px 10px rgba(214, 90, 45, 0.2);
 }
 
-.pagination-dots {
-  display: flex;
-  gap: 8px;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #DCC6B6;
-  transition: background-color 0.3s ease;
-}
-
-.dot.active {
-  background-color: #E87A3F;
-  width: 24px;
-  border-radius: 4px;
+/* Responsive */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .gallery {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .features {
+    grid-template-columns: 1fr;
+  }
+  .contact-cta {
+    grid-template-columns: 1fr;
+    text-align: center;
+    gap: 1rem;
+  }
 }

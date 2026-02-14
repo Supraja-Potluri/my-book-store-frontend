@@ -1,12 +1,22 @@
 :root {
-  font-family: Arial, sans-serif;
+  --color-text-main: #1d1d1f;
+  --color-text-light: #6e6e73;
+  --color-accent: #E87A3F;
+  --color-bg: #ffffff;
+  --color-bg-soft: #f5f5f7;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-sm: 0 4px 10px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+  --transition-fast: 150ms ease;
+  --transition-medium: 300ms ease;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu;
   line-height: 1.5;
   font-weight: 400;
-  
   color-scheme: light;
-  color: #3D2C29;
-  background-color: #ffffff;
-  
+  color: var(--color-text-main);
+  background-color: var(--color-bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -21,4 +31,5 @@ body {
 
 button {
   cursor: pointer;
+  transition: transform var(--transition-fast), opacity var(--transition-fast);
 }

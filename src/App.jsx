@@ -1,35 +1,135 @@
-import { useState, useEffect } from 'react'
-import './App.css'
-import SplashScreen from './components/SplashScreen'
-import LaunchScreen from './components/LaunchScreen'
-import FormScreen from './components/FormScreen'
+// return (
+//       <HomePage
+//         user={user}
+//         cartCount={cartCount}
+//         onAddToCart={() => setCartCount((c) => c + 1)}
+//         onNavigate={(dest) => {
+//           if (dest === "home") setScreen("home");
+//           if (dest === "landing") setScreen("landing");
+//         }}
+//       />
+//     );
+//   }
+// =======
+//   if (screen === "home") {
+//     return (
+//       <HomePage
+//         user={user}
+//         cartItems={cartItems}
+//         onAddToCart={(book) => setCartItems((items) => [...items, book])}
+//         onRemoveFromCart={(index) => setCartItems((items) => items.filter((_, i) => i !== index))}
+//         onNavigate={(dest) => {
+//       navigate('splash')
+//     }, 2000)
+//     return () => clearTimeout(timer)
+//   }, [])
+
+//   useEffect(() => {
+//     const handler = (e) => {
+//       const s = e.state?.state || window.location.hash.replace('#', '') || 'launch'
+//       setAppState(s)
+//     }
+//     window.addEventListener('popstate', handler)
+//     return () => window.removeEventListener('popstate', handler)
+//   }, [])
+
+//   if (appState === 'launch') {
+//     return <LaunchScreen />
+//   }
+
+//   if (appState === 'splash') {
+//     return <SplashScreen onGetStarted={() => navigate('form')} onBack={() => window.history.back()} />
+//   }
+
+//   if (appState === 'form') {
+//     return <FormScreen goBack={() => window.history.back()} />
+//   }
+
+//   return null
+// }
+
+// export default App
+
+
+import { useState, useEffect } from "react";
+import LottieSplash from "./components/SplashScreen";
+import LandingPage from "./components/LandingPage";
+import AuthPage from "./components/AuthPage";
+import HomePage from "./components/HomePage";
+import CartPage from "./components/CartPage";
 
 function App() {
-  // appState can be: 'launch', 'splash', 'form'
-  const [appState, setAppState] = useState('launch')
+  const [screen, setScreen] = useState("splash");
+  const [initialLoad, setInitialLoad] = useState(true);
+  const [user, setUser] = useState(null);
+  const [cartItems, setCartItems] = useState([]);
 
   useEffect(() => {
-    if (appState === 'launch') {
-      const timer = setTimeout(() => {
-        setAppState('splash')
-      }, 2000)
-      return () => clearTimeout(timer)
+    window.history.replaceState({ screen: "splash" }, '', '#splash');
+  }, []);
+
+  useEffect(() => {
+    window.history.pushState({ screen }, '', `#${screen}`);
+  }, [screen]);
+
+  useEffect(() => {
+    const handler = (e) => {
+      const s = e.state?.screen || window.location.hash.replace('#', '') || 'splash';
+      setScreen(s);
+      setInitialLoad(false);
+    };
+    window.addEventListener('popstate', handler);
+    return () => window.removeEventListener('popstate', handler);
+  }, []);
+
+  useEffect(() => {
+    if (initialLoad) {
+      setTimeout(() => {
+        setScreen("landing");
+        setInitialLoad(false);
+      }, 2500);
     }
-  }, [appState])
+  }, [initialLoad]);
 
-  if (appState === 'launch') {
-    return <LaunchScreen />
+  if (screen === "splash") {
+    return <LottieSplash onFinish={() => setScreen("landing")} />;
   }
 
-  if (appState === 'splash') {
-    return <SplashScreen onGetStarted={() => setAppState('form')} />
+  if (screen === "landing") {
+    return <LandingPage onRegister={() => setScreen("auth")} onBack={() => setScreen("splash")} />;
   }
 
-  if (appState === 'form') {
-    return <FormScreen goBack={() => setAppState('splash')} />
+  if (screen === "auth") {
+    return (
+      <AuthPage
+        onForward={() => setScreen("home")}
+        onSuccess={({ username }) => {
+          setUser({ name: username || "Account" });
+          setScreen("home");
+        }}
+      />
+    );
   }
 
-  return null
+  if (screen === "home") {
+    return (
+      <HomePage
+        user={user}
+        cartCount={cartItems.length}
+        onAddToCart={(book) => setCartItems((items) => [...items, book])}
+        onOpenCart={() => setScreen("cart")}
+        onNavigate={(dest) => {
+          if (dest === "home") setScreen("home");
+          if (dest === "landing") setScreen("landing");
+        }}
+      />
+    );
+  }
+  if (screen === "cart") {
+    return <CartPage items={cartItems} onBack={() => setScreen("home")} />;
+  }
+
+  return null;
 }
 
-export default App
+export default App;
