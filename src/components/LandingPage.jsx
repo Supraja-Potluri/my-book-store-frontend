@@ -140,6 +140,7 @@ const LandingPage = ({ onRegister }) => {
   }, []);
   return (
     <div className="landing">
+      {/* <div style={{background: 'yellow', color: 'black', padding: 16, fontWeight: 700, fontSize: 20, zIndex: 9999, position: 'relative'}}>DEBUG: LandingPage Rendered</div> */}
       {/* HEADER */}
       <header className={`header ${scrolled ? "scrolled" : ""}`}>
         <div className="brand">

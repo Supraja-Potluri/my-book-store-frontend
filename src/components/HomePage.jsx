@@ -1,174 +1,301 @@
-// import React from "react";
-// import "./HomePage.css";
-// import { Menu, Search, ShoppingCart, User, ChevronRight, Star } from "lucide-react";
-// import logo from "../assets/book_logo.png";
-// import img1 from "../assets/books.avif";
-// import img2 from "../assets/the-book-shop.avif";
-// import img3 from "../assets/bookshop.jpg";
-
-// const HomePage = () => {
-//   return (
-//     <div className="home">
-//       <header className="hp-header">
-//         <button className="hp-menu-btn" aria-label="Menu">
-//           <Menu size={20} />
-//         </button>
-//         <div className="hp-brand">
-//           <img src={logo} alt="logo" />
-//           <span>My Book Store</span>
-//         </div>
-//         <div className="hp-search">
-//           <input placeholder="Search books, authors, exams…" />
-//           <Search size={18} className="icon" />
-//         </div>
-//         <button className="hp-action" aria-label="Cart">
-//           <ShoppingCart size={20} />
-//         </button>
-//         <button className="hp-action" aria-label="Account">
-//           <User size={20} />
-//         </button>
-//       </header>
-
-//       <section className="hp-hero">
-//         <div className="hp-hero-card">
-//           <h1>Discover Books For Every Journey</h1>
-//           <p>Browse academic, competitive, and general titles curated for you.</p>
-//           <button className="hp-cta">
-//             Explore Now <ChevronRight size={18} />
-//           </button>
-//         </div>
-//         <div className="hp-hero-card">
-//           <h1>Daily Deals</h1>
-//           <p>Save on bestsellers and exam prep essentials.</p>
-//           <button className="hp-cta">
-//             View Offers <ChevronRight size={18} />
-//           </button>
-//         </div>
-//       </section>
-
-//       <div className="hp-categories">
-//         <span className="hp-chip active">All</span>
-//         <span className="hp-chip">Academic</span>
-//         <span className="hp-chip">Competitive Exams</span>
-//         <span className="hp-chip">Self Help</span>
-//         <span className="hp-chip">Fiction</span>
-//         <span className="hp-chip">Kids</span>
-//       </div>
-
-//       <section className="hp-grid">
-//         <article className="hp-card">
-//           <img src={img1} alt="Books" />
-//           <div className="info">
-//             <div className="title">Essential Exam Guide</div>
-//             <div className="meta">
-//               <span className="hp-price">₹499</span>
-//               <span className="hp-rating"><Star size={16} />4.6</span>
-//             </div>
-//             <button className="hp-add">Add to Cart</button>
-//           </div>
-//         </article>
-//         <article className="hp-card">
-//           <img src={img2} alt="Shelf" />
-//           <div className="info">
-//             <div className="title">Modern Fiction Set</div>
-//             <div className="meta">
-//               <span className="hp-price">₹799</span>
-//               <span className="hp-rating"><Star size={16} />4.4</span>
-//             </div>
-//             <button className="hp-add">Add to Cart</button>
-//           </div>
-//         </article>
-//         <article className="hp-card">
-//           <img src={img3} alt="Shop" />
-//           <div className="info">
-//             <div className="title">Reading Essentials Pack</div>
-//             <div className="meta">
-//               <span className="hp-price">₹599</span>
-//               <span className="hp-rating"><Star size={16} />4.7</span>
-//             </div>
-//             <button className="hp-add">Add to Cart</button>
-//           </div>
-//         </article>
-//         <article className="hp-card">
-//           <img src={img1} alt="Books" />
-//           <div className="info">
-//             <div className="title">Study Planner Combo</div>
-//             <div className="meta">
-//               <span className="hp-price">₹449</span>
-//               <span className="hp-rating"><Star size={16} />4.5</span>
-//             </div>
-//             <button className="hp-add">Add to Cart</button>
-//           </div>
-//         </article>
-//       </section>
-//     </div>
-//   );
-// };
-
-
-// export default HomePage;
-
-import "../styles/HomePage.css";
-import { Menu, Search, ShoppingCart, User } from "lucide-react";
+import { Menu, Search, ShoppingCart, User, Heart } from "lucide-react";
+import { useState, useEffect } from "react";
 import logo from "../assets/book_logo.png";
+import bookshelfImg from "../assets/BookBanner.png";
 import BookCarousel from "./BookCarousel";
-import { trendingBooks, availableBooks } from "../data/books";
-import { useEffect, useState } from "react";
-import heroImg from "../assets/BookCarousel.png";
-import MenuDropdown from "./MenuDropdown";
+import { trendingBooks, availableBooks, newArrivals, examPreparation } from "../data/books";
+import "../styles/HomePage.css";
 
-const HomePage = ({ user, cartCount, onAddToCart, onOpenCart }) => {
-  const [typed, setTyped] = useState("");
+const HomePage = ({ user, cartCount, onAddToCart, onOpenCart, onNavigate, onSelectBook, wishlistItems = [], onWishlistToggle }) => {
+  const [searchQuery, setSearchQuery] = useState("");
   const [showMenu, setShowMenu] = useState(false);
+
+  // Typewriter effect for hero banner - smooth continuous loop
+  const heroTexts = [
+    "Discover Your Next Great Read",
+    "Discover Books That Shape Your Future",
+    "Discover Stories That Stay With You"
+  ];
+  const [displayedText, setDisplayedText] = useState("");
+  const [textIndex, setTextIndex] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
-    const text = "Discover books that shape your future";
-    let i = 0;
-    const timer = setInterval(() => {
-      i = (i + 1) % (text.length + 1);
-      setTyped(text.slice(0, i));
-    }, 50);
-    return () => clearInterval(timer);
-  }, []);
+    let charIndex = 0;
+    let timeout;
+
+    const currentText = heroTexts[textIndex];
+    
+    const type = () => {
+      if (!isDeleting) {
+        // Typing: add one character at a time
+        if (charIndex <= currentText.length) {
+          setDisplayedText(currentText.substring(0, charIndex));
+          charIndex++;
+          timeout = setTimeout(type, 80);
+        } else {
+          // Finished typing - pause briefly then start deleting
+          timeout = setTimeout(() => {
+            setIsDeleting(true);
+            type();
+          }, 500); // Pause 500ms after completing
+        }
+      } else {
+        // Deleting: remove one character at a time
+        if (charIndex >= 0) {
+          setDisplayedText(currentText.substring(0, charIndex));
+          charIndex--;
+          timeout = setTimeout(type, 40);
+        } else {
+          // Finished deleting - move to next text
+          setIsDeleting(false);
+          setTextIndex((prev) => (prev + 1) % heroTexts.length);
+        }
+      }
+    };
+
+    timeout = setTimeout(type, isDeleting ? 40 : 80);
+    return () => clearTimeout(timeout);
+    // eslint-disable-next-line
+  }, [textIndex, isDeleting]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const query = searchQuery.trim().toLowerCase();
+    if (query) {
+      const allBooks = [...trendingBooks, ...availableBooks, ...newArrivals, ...examPreparation];
+      const results = allBooks.filter(book => 
+        book.title.toLowerCase().includes(query) || 
+        book.author.toLowerCase().includes(query) ||
+        book.type.toLowerCase().includes(query)
+      );
+      if (results.length > 0) {
+        console.log(`Found ${results.length} book(s) matching "${searchQuery}"`, results);
+      } else {
+        console.log(`No books found matching "${searchQuery}"`);
+      }
+      // You can add navigation to search results here
+      // onNavigate?.('search', { query, results });
+    }
+  };
+
+  const handleNavigateToProfile = () => {
+    onNavigate?.("profile");
+    setShowMenu(false);
+  };
+
+  const handleSignOut = () => {
+    if (window.confirm("Are you sure you want to sign out?")) {
+      onNavigate?.("landing");
+      setShowMenu(false);
+    }
+  };
 
   return (
     <div className="home">
-      {/* HEADER */}
+      {/* STICKY HEADER */}
       <header className="hp-header">
-        <button className="hp-menu-btn" aria-label="Menu" onClick={() => setShowMenu((v) => !v)}>
+        <button 
+          className="hp-menu-btn" 
+          onClick={() => setShowMenu(!showMenu)} 
+          aria-label="Menu"
+          title="Toggle menu"
+        >
           <Menu size={20} />
         </button>
+
         <div className="hp-brand">
-          <img src={logo} alt="logo" />
+          <img src={logo} alt="My Book Store logo" />
           <span>My Book Store</span>
         </div>
-        <div className="hp-search">
-          <input placeholder="Search books, authors, exams..." />
-          <Search size={18} className="icon" />
-        </div>
-        <button className="hp-action" aria-label="Cart" onClick={onOpenCart}>
-          <ShoppingCart size={20} />
+
+        {/* SEARCH BAR */}
+        <form className="hp-search" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="Search books, authors, exams..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Search"
+          />
+          <button type="submit" aria-label="Search" className="search-btn">
+            <Search size={18} />
+          </button>
+        </form>
+
+        {/* ACTION BUTTONS */}
+
+        {/* Top bar icons with fill toggle */}
+        <button
+          className={`hp-action cart-btn${user?.cartFilled ? " active" : ""}`}
+          onClick={onOpenCart}
+          aria-label={`Shopping cart with ${cartCount} items`}
+          title="View cart"
+        >
+          <ShoppingCart fill={user?.cartFilled ? "currentColor" : "none"} size={20} />
           {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
         </button>
-        <button className="hp-action" aria-label="Account">
-          <User size={20} />
+
+        <button
+          className={`hp-action wishlist-btn${user?.wishlistFilled ? " active" : ""}`}
+          onClick={() => onNavigate?.("wishlist")}
+          aria-label="Wishlist"
+          title="View wishlist"
+        >
+          <Heart fill={user?.wishlistFilled ? "currentColor" : "none"} size={20} />
         </button>
-        {user?.name && <span className="user-name">{user.name}</span>}
+
+        <button
+          className={`hp-action profile-btn${user?.profileFilled ? " active" : ""}`}
+          onClick={() => { onNavigate?.("profile"); }}
+          aria-label="Account"
+          title={`Account: ${user?.name || "User"}`}
+        >
+          <User fill={user?.profileFilled ? "currentColor" : "none"} size={20} />
+        </button>
+
+        {/* SHOW WELCOME MESSAGE */}
+        {user?.name && <span className="user-greeting">Hi, {user.name.split(" ")[0]}!</span>}
       </header>
-      {showMenu && <MenuDropdown />}
 
-      {/* HERO BANNER */}
-      <div className="hp-hero-banner">
-        <img src={heroImg} alt="Books banner" />
-        <div className="hp-hero-text">
-          {typed}
-          <div className="hp-hero-sub">Academic • Competitive • Self Help • Fiction</div>
+      {/* MENU DROPDOWN */}
+      {showMenu && (
+        <div className="menu-dropdown">
+          <nav className="menu-nav">
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); setShowMenu(false); }}>Home</a>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); setShowMenu(false); }}>Browse All Books</a>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); setShowMenu(false); }}>Academic Books</a>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); setShowMenu(false); }}>Exam Preparation</a>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); setShowMenu(false); }}>Fiction & Stories</a>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); setShowMenu(false); }}>Self Help & Motivation</a>
+            <div className="menu-divider"></div>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); handleNavigateToProfile(); }}>My Profile</a>
+            <a href="#" className="menu-item" onClick={(e) => { e.preventDefault(); handleSignOut(); }}>Sign Out</a>
+          </nav>
         </div>
-      </div>
+      )}
 
-      {/* CAROUSELS */}
-      <BookCarousel title="🔥 Trending Books" books={trendingBooks} onAdd={onAddToCart} />
-      <BookCarousel title="📚 Available Books" books={availableBooks} onAdd={onAddToCart} />
-      <BookCarousel title="🎯 Best for Competitive Exams" books={trendingBooks} onAdd={onAddToCart} />
+      {/* MAIN CONTENT */}
+      <main className="hp-main">
+        {/* HERO SECTION WITH BANNER */}
+        <section className="hp-hero" style={{ backgroundImage: `linear-gradient(135deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.5) 100%), url(${bookshelfImg})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundAttachment: "scroll" }}>
+          <div className="hp-hero-overlay"></div>
+          <div className="hp-hero-content" style={{ textAlign: "left", maxWidth: 700 }}>
+            <h1 className="hp-hero-title">{displayedText}</h1>
+            <p className="hp-hero-subtitle">Academic • Competitive • Self Help • Fiction</p>
+            <button className="hp-cta-btn">
+              Start Exploring
+            </button>
+          </div>
+        </section>
+
+        {/* BOOK CAROUSELS */}
+
+        <BookCarousel
+          title="Trending Books"
+          books={trendingBooks}
+          onAdd={onAddToCart}
+          onSelectBook={onSelectBook}
+          wishlistItems={wishlistItems}
+          onWishlistToggle={onWishlistToggle}
+        />
+
+        <BookCarousel
+          title="Available Books"
+          books={availableBooks}
+          onAdd={onAddToCart}
+          onSelectBook={onSelectBook}
+          wishlistItems={wishlistItems}
+          onWishlistToggle={onWishlistToggle}
+        />
+
+        <BookCarousel
+          title="New Arrivals"
+          books={newArrivals}
+          onAdd={onAddToCart}
+          onSelectBook={onSelectBook}
+          wishlistItems={wishlistItems}
+          onWishlistToggle={onWishlistToggle}
+        />
+
+        <BookCarousel
+          title="Exam Preparation"
+          books={examPreparation}
+          onAdd={onAddToCart}
+          onSelectBook={onSelectBook}
+          wishlistItems={wishlistItems}
+          onWishlistToggle={onWishlistToggle}
+        />
+
+        {/* FEATURES SECTION */}
+        <section className="hp-features">
+          <div className="feature-item">
+            <div className="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 12h14M5 12l-3 3m3-3l-3-3m14 3l3 3m-3-3l3-3M9 5v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V5"/>
+              </svg>
+            </div>
+            <h3>Fast Delivery</h3>
+            <p>Local delivery within 2-3 days</p>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <h3>Quality Guaranteed</h3>
+            <p>100% genuine books from trusted publishers</p>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <h3>Best Prices</h3>
+            <p>Affordable pricing with occasional discounts</p>
+          </div>
+          <div className="feature-item">
+            <div className="feature-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+              </svg>
+            </div>
+            <h3>Customer Support</h3>
+            <p>Dedicated support for all your queries</p>
+          </div>
+        </section>
+      </main>
+
+      {/* FOOTER */}
+      <footer className="hp-footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <h4>About Us</h4>
+            <p>My Book Store is your trusted local bookstore offering a wide range of books for all categories and readers.</p>
+          </div>
+          <div className="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><a href="#home">Home</a></li>
+              <li><a href="#books">Books</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h4>Contact Info</h4>
+            <p>Email: info@mybookstore.com</p>
+            <p>Phone: +91 XXXX XXXX XX</p>
+            <p>Location: Vijayawada, Andhra Pradesh</p>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>&copy; 2024 My Book Store. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };
